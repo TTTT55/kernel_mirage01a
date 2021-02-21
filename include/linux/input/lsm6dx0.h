@@ -79,7 +79,7 @@
 #define LSM6DL0_ACC_ODR_1280		(0xC0)
 
 /**********************************************/
-* 	Gyroscope section defines	 	*/
+/* 	Gyroscope section defines	 	*/
 /**********************************************/
 
 

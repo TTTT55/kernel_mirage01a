@@ -1812,6 +1812,10 @@ static int msm_cpp_cfg(struct cpp_device *cpp_dev,
 	struct msm_cpp_frame_info_t *frame = NULL;
 	struct msm_cpp_frame_info_t k_frame_info;
 	int32_t rc = 0;
+	if (copy_from_user(&k_frame_info,
+			(void __user *)ioctl_ptr->ioctl_ptr,
+			sizeof(k_frame_info)))
+			return -EFAULT;
 
 	if (copy_from_user(&k_frame_info,
 		(void __user *)ioctl_ptr->ioctl_ptr,

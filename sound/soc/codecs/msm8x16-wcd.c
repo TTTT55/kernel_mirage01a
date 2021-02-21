@@ -2125,43 +2125,6 @@ static int msm8x16_wcd_pa_gain_put(struct snd_kcontrol *kcontrol,
 	return 0;
 }
 
-#ifdef CONFIG_MACH_JALEBI
-static int msm8x16_wcd_ext_spk_get(struct snd_kcontrol *kcontrol,
-				struct snd_ctl_elem_value *ucontrol)
-{
-	struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
-	struct msm8x16_wcd_priv *msm8x16_wcd = snd_soc_codec_get_drvdata(codec);
-
-	ucontrol->value.integer.value[0] = (msm8x16_wcd->ext_spk_mode == 0) ? 0 : 1;
-
-	dev_dbg(codec->dev, "%s: ext_spk_mode = %d\n", __func__, msm8x16_wcd->ext_spk_mode);
-
-        return 0;
-}
-
-static int msm8x16_wcd_ext_spk_set(struct snd_kcontrol *kcontrol,
-				struct snd_ctl_elem_value *ucontrol)
-{
-	struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
-	struct msm8x16_wcd_priv *msm8x16_wcd = snd_soc_codec_get_drvdata(codec);
-	long value = ucontrol->value.integer.value[0];
-
-	dev_dbg(codec->dev, "%s: ucontrol->value.integer.value[0] = %ld\n", __func__, value);
-
-	if ((value < 0) || (value > 4)) {
-		return -EINVAL;
-	}
-
-	if (msm8x16_wcd->ext_spk_mode == value) {
-		return 0;
-	}
-
-	msm8x16_wcd->ext_spk_mode = value;
-
-	dev_dbg(codec->dev, "%s: ext_spk_mode = %d\n", __func__, msm8x16_wcd->ext_spk_mode);
-	return 0;
-}
-#elif defined(CONFIG_TEST_ONLY)
 static int test_spk_pa_get(struct snd_kcontrol *kcontrol,
 				struct snd_ctl_elem_value *ucontrol)
 {
@@ -2183,7 +2146,6 @@ static int test_spk_pa_get(struct snd_kcontrol *kcontrol,
 
 	return 0;
 }
-
 
 static int test_spk_pa_set(struct snd_kcontrol *kcontrol,
 				struct snd_ctl_elem_value *ucontrol)
@@ -2215,7 +2177,6 @@ static int test_spk_pa_set(struct snd_kcontrol *kcontrol,
 		__func__, test_spk_pa_mode);
 	return 0;
 }
-#endif
 
 static int msm8x16_wcd_boost_option_get(struct snd_kcontrol *kcontrol,
 				struct snd_ctl_elem_value *ucontrol)
@@ -2587,20 +2548,12 @@ static const struct soc_enum msm8x16_wcd_spk_boost_ctl_enum[] = {
 		SOC_ENUM_SINGLE_EXT(2, msm8x16_wcd_spk_boost_ctrl_text),
 };
 
-#ifdef CONFIG_MACH_JALEBI
-static const char * const msm8x16_wcd_ext_spk_ctrl_text[] = {
-		"DISABLE", "ENABLE", "MODE_2", "MODE_3", "MODE_4"};
-static const struct soc_enum msm8x16_wcd_ext_spk_ctl_enum[] = {
-		SOC_ENUM_SINGLE_EXT(5, msm8x16_wcd_ext_spk_ctrl_text),
-};
-#elif defined(CONFIG_TEST_ONLY)
 static const char * const test_spk_pa_ctrl_text[] = {
 		"MODE_1", "MODE_2", "MODE_3",
 		"MODE_4"};
 static const struct soc_enum test_spk_pa_ctl_enum[] = {
 		SOC_ENUM_SINGLE_EXT(4, test_spk_pa_ctrl_text),
 };
-#endif
 
 static const char * const msm8x16_wcd_ext_spk_boost_ctrl_text[] = {
 		"DISABLE", "ENABLE"};

@@ -653,7 +653,7 @@ static void poll_function_work(struct work_struct *input_work)
 	xyz[0] = -xyz[0];
 	xyz[2] = -xyz[2];
 	#endif
-	#ifdef CONFIG_TEST_ONLY
+	#ifdef CONFIG_TESTPLUS_ONLY
 	xyz[0] = xyz[0];
 	xyz[2] = xyz[2];
 	#endif
@@ -2182,7 +2182,7 @@ static int lsm6ds3_calibrate(struct sensors_classdev *sensors_cdev,
 		#ifdef CONFIG_TESTPLUS_ONLY
 		sdata->cali_data[2] = GRAVITY_HAL_UNIT - ABS(data[2]);
 		#endif
-		#ifdef CONFIG_TEST_ONLY
+		#ifdef CONFIG_TESTPLUS_ONLY
 		sdata->cali_data[2] = ABS(data[2]) - GRAVITY_HAL_UNIT;
 		#endif
 	} else if (sdata->sindex == LSM6DS3_GYRO) {

@@ -25,6 +25,7 @@
 #include <linux/slab.h>
 #include <linux/input.h>
 #include <linux/time.h>
+#include <linux/fsync.h>
 
 struct cpu_sync {
 	struct task_struct *thread;
@@ -166,8 +167,9 @@ static int boost_adjust_notify(struct notifier_block *nb, unsigned long val,
 
 		min = max(b_min, ib_min);
 
-	min = min(min, policy->max);
-
+		pr_debug("CPU%u policy min before boost: %u kHz\n",
+			 cpu, policy->min);
+		pr_debug("CPU%u boost min: %u kHz\n", cpu, min);
 
 		cpufreq_verify_within_limits(policy, min, UINT_MAX);
 
@@ -185,7 +187,6 @@ static int boost_adjust_notify(struct notifier_block *nb, unsigned long val,
 
 static struct notifier_block boost_adjust_nb = {
 	.notifier_call = boost_adjust_notify,
-	.priority = INT_MAX-2,
 };
 
 static void do_boost_rem(struct work_struct *work)
@@ -206,16 +207,8 @@ static void update_policy_online(void)
 	/* Re-evaluate policy to trigger adjust notifier for online CPUs */
 	get_online_cpus();
 	for_each_online_cpu(i) {
-		/*
-		 * both clusters have synchronous cpus
-		 * no need to upldate the policy for each core
-		 * individually, saving at least one [down|up] write
-		 * and a [lock|unlock] irqrestore per pass
-		 */
-		if ((i & 1) == 0) {
-			pr_debug("Updating policy for CPU%d\n", i);
-			cpufreq_update_policy(i);
-		}
+		pr_debug("Updating policy for CPU%d\n", i);
+		cpufreq_update_policy(i);
 	}
 	put_online_cpus();
 }
@@ -227,6 +220,7 @@ static void do_input_boost_rem(struct work_struct *work)
 
 	/* Reset the input_boost_min for all CPUs in the system */
 	pr_debug("Resetting input boost min for all CPUs\n");
+	set_fsync(true);
 	for_each_possible_cpu(i) {
 		i_sync_info = &per_cpu(sync_info, i);
 		i_sync_info->input_boost_min = 0;
@@ -360,9 +354,6 @@ static void do_input_boost(struct work_struct *work)
 	unsigned int i, ret;
 	struct cpu_sync *i_sync_info;
 
-	if (!input_boost_ms)
-		return;
-
 	cancel_delayed_work_sync(&input_boost_rem);
 	if (sched_boost_active) {
 		sched_set_boost(0);
@@ -371,6 +362,7 @@ static void do_input_boost(struct work_struct *work)
 
 	/* Set the input_boost_min for all CPUs in the system */
 	pr_debug("Setting input boost min for all CPUs\n");
+	set_fsync(false);
 	for_each_possible_cpu(i) {
 		i_sync_info = &per_cpu(sync_info, i);
 		i_sync_info->input_boost_min = i_sync_info->input_boost_freq;

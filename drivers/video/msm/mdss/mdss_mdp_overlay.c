@@ -259,12 +259,10 @@ int mdss_mdp_overlay_req_check(struct msm_fb_data_type *mfd,
 	    req->src_rect.w < min_src_size || req->src_rect.h < min_src_size ||
 	    CHECK_BOUNDS(req->src_rect.x, req->src_rect.w, req->src.width) ||
 	    CHECK_BOUNDS(req->src_rect.y, req->src_rect.h, req->src.height)) {
-#if 0
 		pr_err("invalid source image img wh=%dx%d rect=%d,%d,%d,%d\n",
 		       req->src.width, req->src.height,
 		       req->src_rect.x, req->src_rect.y,
 		       req->src_rect.w, req->src_rect.h);
-#endif
 		return -EOVERFLOW;
 	}
 
@@ -3218,10 +3216,11 @@ static int mdss_fb_get_metadata(struct msm_fb_data_type *mfd,
 		ret = mdss_fb_get_hw_caps(mfd, &metadata->data.caps);
 		break;
 	case metadata_op_get_ion_fd:
-		if (mfd->fb_ion_handle) {
+		if (mfd->fb_ion_handle && mfd->fb_ion_client) {
 			get_dma_buf(mfd->fbmem_buf);
 			metadata->data.fbmem_ionfd =
-				dma_buf_fd(mfd->fbmem_buf, 0);
+				ion_share_dma_buf_fd(mfd->fb_ion_client,
+					mfd->fb_ion_handle);
 			if (metadata->data.fbmem_ionfd < 0) {
 				dma_buf_put(mfd->fbmem_buf);
 				pr_err("fd allocation failed. fd = %d\n",

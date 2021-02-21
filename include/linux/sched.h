@@ -1235,6 +1235,9 @@ struct task_struct {
 #ifdef CONFIG_SMP
 	struct llist_node wake_entry;
 	int on_cpu;
+	struct task_struct *last_wakee;
+	unsigned long wakee_flips;
+	unsigned long wakee_flip_decay_ts;
 #endif
 	int on_rq;
 
@@ -2424,10 +2427,7 @@ struct task_struct *fork_idle(int);
 extern pid_t kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
 
 extern void set_task_comm(struct task_struct *tsk, char *from);
-extern char *__get_task_comm(char *to, size_t len, struct task_struct *tsk);
-#define get_task_comm(buf, tsk) ({			\
-	__get_task_comm(buf, sizeof(buf), tsk);		\
-})
+extern char *get_task_comm(char *to, struct task_struct *tsk);
 
 #ifdef CONFIG_SMP
 void scheduler_ipi(void);

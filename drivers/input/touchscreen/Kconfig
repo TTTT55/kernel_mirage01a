@@ -998,19 +998,15 @@ config TOUCHSCREEN_SYNAPTICS_DSX_FW_UPDATE_EXTRA_SYSFS
 
 	  If unsure, say N.
 
-config TOUCHSCREEN_FT8716
-       tristate "focaltech touchscreens"
-       depends on I2C
-       help
-         Say Y here if you have a focaltech touchscreen.
-	 focaltech controllers are multi touch controllers which can
-	 report 5 touches at a time.
+config TOUCHSCREEN_SYNAPTICS_DSX_FW_UPDATE_EXTRA_SYSFS
+	bool "Synaptics DSX firmware update extra sysfs attributes"
+	depends on TOUCHSCREEN_SYNAPTICS_DSX_FW_UPDATE
+	help
+	  Say Y here to enable support for extra sysfs attributes
+	  supporting firmware update in a development environment.
+	  This does not affect the core or other subsystem attributes.
 
-         If unsure, say N.
-
-         To compile this driver as a module, choose M here: the
-         module will be called focaltech.
-
+	  If unsure, say N.
 config TOUCHSCREEN_HIMAX852XES
        tristate "Himax touchscreens"
        depends on I2C
@@ -1160,7 +1156,6 @@ config INPUT_MT_WRAPPER
 
 	  If unsure, say N.
 
-source "drivers/input/touchscreen/melfas_mip4_test/Kconfig"
 
 config TOUCHSCREEN_IT7260_I2C
 	tristate "IT7260 Touchscreen Driver"

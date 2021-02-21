@@ -1912,13 +1912,7 @@ static void *def_msm8x16_wcd_mbhc_cal(void)
 	}
 
 #define S(X, Y) ((WCD_MBHC_CAL_PLUG_TYPE_PTR(msm8x16_wcd_cal)->X) = (Y))
-#ifdef CONFIG_MACH_CP8675
-	S(v_hs_max, 2550);
-#elif defined(CONFIG_TEST_ONLY)
 	S(v_hs_max, 1600);
-#else
-	S(v_hs_max, 1500);
-#endif
 #undef S
 #define S(X, Y) ((WCD_MBHC_CAL_BTN_DET_PTR(msm8x16_wcd_cal)->X) = (Y))
 	S(num_btn, WCD_MBHC_DEF_BUTTONS);
@@ -1941,51 +1935,30 @@ static void *def_msm8x16_wcd_mbhc_cal(void)
 	 * 210-290 == Button 2
 	 * 360-680 == Button 3
 	 */
-#ifdef CONFIG_MACH_JALEBI
-	btn_low[0] = 0;
-	btn_high[0] = 150;
-	btn_low[1] = 150;
-	btn_high[1] = 150;
-	btn_low[2] = 150;
-	btn_high[2] = 150;
-	btn_low[3] = 150;
-	btn_high[3] = 150;
-	btn_low[4] = 150;
-	btn_high[4] = 150;
-#elif defined(CONFIG_MACH_CP8675)
-	btn_low[0] = 50;
-	btn_high[0] = 50;
-	btn_low[1] = 87;
-	btn_high[1] = 87;
-	btn_low[2] = 75;
-	btn_high[2] = 75;
-	btn_low[3] = 112;
-	btn_high[3] = 112;
-	btn_low[4] = 137;
-	btn_high[4] = 137;
-#elif defined(CONFIG_TESTPLUS_ONLY)
-        btn_low[0] = 100;
-        btn_high[0] = 100;
-        btn_low[1] = 101;
-        btn_high[1] = 101;
-        btn_low[2] = 251;
-        btn_high[2] = 251;
-        btn_low[3] = 500;
-        btn_high[3] = 500;
-        btn_low[4] = 501;
-        btn_high[4] = 501;
+#ifdef CONFIG_TESTPLUS_ONLY
+	btn_low[0] = 100;
+	btn_high[0] = 100;
+	btn_low[1] = 101;
+	btn_high[1] = 101;
+	btn_low[2] = 251;
+	btn_high[2] = 251;
+	btn_low[3] = 500;
+	btn_high[3] = 500;
+	btn_low[4] = 501;
+	btn_high[4] = 501;
 #else
-	btn_low[0] = 75;
-	btn_high[0] = 75;
-	btn_low[1] = 150;
-	btn_high[1] = 150;
-	btn_low[2] = 237;
-	btn_high[2] = 237;
-	btn_low[3] = 450;
-	btn_high[3] = 450;
-	btn_low[4] = 500;
-	btn_high[4] = 500;
+	btn_low[0] = 100;
+	btn_high[0] = 100;
+	btn_low[1] = 101;
+	btn_high[1] = 101;
+	btn_low[2] = 240;
+	btn_high[2] = 240;
+	btn_low[3] = 500;
+	btn_high[3] = 500;
+	btn_low[4] = 501;
+	btn_high[4] = 501;
 #endif
+	
 
 	return msm8x16_wcd_cal;
 }
@@ -3106,7 +3079,6 @@ static struct snd_soc_dai_link msm8x16_dai[] = {
 static struct snd_soc_dai_link msm8x16_wcd_dai_links[
 				ARRAY_SIZE(msm8x16_dai) +
 				ARRAY_SIZE(msm8x16_wcd_dai)];
-
 
 static struct snd_soc_dai_link msm8x16_9326_dai_links[
 				ARRAY_SIZE(msm8x16_dai) +

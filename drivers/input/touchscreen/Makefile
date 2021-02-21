@@ -89,7 +89,8 @@ obj-$(CONFIG_TOUCHSCREEN_GT9XX_YL)	+= gt9xx_yl/
 obj-$(CONFIG_TOUCHSCREEN_BU21150)	+= bu21150.o
 obj-$(CONFIG_INPUT_MT_WRAPPER)		+= input_mt_wrapper.o
 obj-$(CONFIG_TOUCHSCREEN_IT7260_I2C)    += it7258_ts_i2c.o
-obj-$(CONFIG_TOUCHSCREEN_FT8716)	+= ft8716/
+obj-$(CONFIG_TESTPLUS_ONLY)            += melfas_mip4_testplus/
+obj-$(CONFIG_TEST_ONLY)                += gt9xx/
 obj-$(CONFIG_TOUCHSCREEN_HIMAX852XES)	+= himax_852xES/
 
 obj-$(CONFIG_MACH_LONGCHEER)	+= lct_tp_fm_info.o
@@ -99,5 +100,3 @@ obj-$(CONFIG_MACH_LONGCHEER)	+= lct_if_ctp_upgrade.o
 
 obj-$(CONFIG_TOUCHSCREEN_MSG2XXX)	+= msg2xxx.o
 obj-$(CONFIG_MACH_YULONG)		+= touchscreen_yl.o
-obj-$(CONFIG_TESTPLUS_ONLY)            += melfas_mip4_testplus/
-obj-$(CONFIG_TEST_ONLY)                += melfas_mip4_test/

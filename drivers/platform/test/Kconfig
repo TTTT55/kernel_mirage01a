@@ -1,10 +1,10 @@
 # Haier configuration options
 
 config TEST_ONLY
-	bool "LYF Mobee01a"
+	bool "LYF Mirage01a"
 	depends on ARCH_MSM8916
 	help
-	  Support for LYF mobee01a variants
+	  Support for LYF mirage01a variants
 	  make macro CONFIG_TEST_ONLY WORKED
 
 config TESTPLUS_ONLY

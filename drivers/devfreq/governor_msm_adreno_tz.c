@@ -222,7 +222,6 @@ static int tz_get_target_freq(struct devfreq *devfreq, unsigned long *freq,
 		return 0;
 	}
 #endif
-
 	/*
 	 * Force to use & record as min freq when system has
 	 * entered pm-suspend or screen-off state.

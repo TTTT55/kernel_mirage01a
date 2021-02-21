@@ -11,20 +11,10 @@
  */
 
 #include "test01a-msm8939-qrd.dtsi"
-#include "test01a-msm8939-camera-sensor-qrd.dtsi"
-#include "dsi-panel-ams497-720p-video.dtsi"
+
 
 &soc {
-        i2c@78b6000 { /* BLSP1 QUP2 */
-		awrgb@45 {
-			compatible = "aw,aw2013-rgb-leds";
-			reg = <0x45>;
-			pinctrl-names = "redled_gpio";
-			pinctrl-0 =  <&redled_gpio10_active>;
-			aw2013,red_gpio20 = <&msm_gpio 10 0>;
-			aw2013,maxbrightness = <160>;
-			aw2013,Imax = <1>;
-		};
+	i2c@78b9000 { /* BLSP1 QUP5 */
 		st480@0c {
 			compatible = "senodia,st480";
 			reg = <0x0c>;
@@ -36,26 +26,8 @@
 			senodia,negate-x;
 		};
 
-                iteon@23 {
-		        compatible = "liteon,ltr553";
-		        reg = <0x23>;
-		        pinctrl-names = "default","sleep";
-		        pinctrl-0 = <&ltr553_default>;
-		        pinctrl-1 = <&ltr553_sleep>;
-		        interrupt-parent = <&msm_gpio>;
-		        interrupts = <113 0x2>;
-		        vdd-supply = <&pm8916_l17>;
-		        vio-supply = <&pm8916_l6>;
-		        liteon,intr = <&msm_gpio 113 0x2>;
-		        liteon,highthr = <250>;
-		        liteon,lowthr = <150>;
-		        liteon_project = "test01a";
-	        };
-	};
-
-	i2c@78b9000 { /* BLSP1 QUP5 */
-	    lsm6ds0@6b {
-			compatible = "st,lsm6ds3";
+		lsm6ds0@6b {
+			compatible = "st,lsm6dx0";
 			reg = <0x6b>;
 			rot-matrix = /bits/ 16 <(0) (1) (0)
 				(-1) (0) (0)
@@ -68,70 +40,6 @@
 			x-fs-range = <0>;
 			aa-filter-bw = <0>;
 		};
-
-		focaltech@38 {
-			compatible = "focaltech,5x06";
-			reg = <0x38>;
-			interrupt-parent = <&msm_gpio>;
-			interrupts = <13 0x2008>;
-			vdd-supply = <&pm8916_l17>;
-			vcc_i2c-supply = <&pm8916_l6>;
-			/* pins used by touchscreen */
-			pinctrl-names = "pmx_ts_active","pmx_ts_suspend","pmx_ts_release";
-			pinctrl-0 = <&ts_int_active &ts_reset_active>;
-			pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
-			pinctrl-2 = <&ts_release>;
-			focaltech,name = "ft5336";
-			focaltech,family-id = <0x14>;
-			focaltech,reset-gpio = <&msm_gpio 12 0x0>;
-			focaltech,irq-gpio = <&msm_gpio 13 0x2008>;
-			focaltech,display-coords = <0 0 1080 1920>;
-			focaltech,panel-coords = <0 0 1080 2098>;
-			focaltech,button-map= <139 102 158>;
-			focaltech,no-force-update;
-			focaltech,i2c-pull-up;
-			focaltech,group-id = <1>;
-			focaltech,hard-reset-delay-ms = <20>;
-			focaltech,soft-reset-delay-ms = <200>;
-			focaltech,num-max-touches = <5>;
-			focaltech,fw-delay-aa-ms = <30>;
-			focaltech,fw-delay-55-ms = <30>;
-			focaltech,fw-upgrade-id1 = <0x11>;
-			focaltech,fw-upgrade-id2 = <0x11>;
-			focaltech,fw-delay-readid-ms = <10>;
-			focaltech,fw-delay-era-flsh-ms = <2000>;
-			focaltech,fw-auto-cal;
-			focaltech,ignore-id-check;
-		};
-	};
-
-	i2c@78ba000 { /* BLSP1 QUP6 */
-			melfas_mip4@48 {
-			compatible = "melfas,mip4_ts";
-			reg = <0x48>;
-			interrupt-parent = <&msm_gpio>;
-			interrupts = <13 0x2>;
-			mip4_ts,fw_name = "melfas/test_melfas_mip4.bin";
-			pinctrl-names = "default";
-			pinctrl-0 = <&melfas_int_default>;
-			mip4_ts,irq-gpio = <&msm_gpio 13 0x00>;
-			mip4_ts,reset-gpio = <&msm_gpio 12 0x00>;
-			mip4_ts,vdd-supply = <&msm_gpio 24 0x00>;
-			mip4_ts,i2c-pull-up = <1>;
-			mip4_ts,max_x = <720>;
-			mip4_ts,max_y = <1080>;
-		};
-	};
-
-	gen-vkeys {
-		compatible = "qcom,gen-vkeys";
-		label = "ft5x06_ts";
-		qcom,disp-maxx = <1080>;
-		qcom,disp-maxy = <1920>;
-		qcom,panel-maxx = <1080>;
-		qcom,panel-maxy = <2098>;
-		qcom,key-codes = <139 172 158>;
-		qcom,y-offset = <0>;
 	};
 
 	sound {
@@ -144,7 +52,6 @@
 		qcom,msm-mbhc-gnd-swh = <0>;
 		qcom,msm-micbias1-ext-cap;
 		qcom,msm-hs-micbias-type = "internal";
-		qcom,msm-spk-ext-pa = <&msm_gpio 11 0>;
 		qcom,audio-routing =
 			"RX_BIAS", "MCLK",
 			"SPK_RX_BIAS", "MCLK",
@@ -157,9 +64,8 @@
 			"AMIC3", "MIC BIAS External";
 		pinctrl-names = "cdc_lines_act",
 				"cdc_lines_sus";
-		pinctrl-0 = <&cdc_pdm_lines_act &cdc_pdm_lines_act38>;
-		pinctrl-1 = <&cdc_pdm_lines_sus &cdc_pdm_lines_sus38>;
-
+		pinctrl-0 = <&cdc_pdm_lines_act>;
+		pinctrl-1 = <&cdc_pdm_lines_sus>;
 		asoc-platform = <&pcm0>, <&pcm1>, <&voip>, <&voice>,
 				<&loopback>, <&compress>, <&hostless>,
 				<&afe>, <&lsm>, <&routing>, <&lpa>;
@@ -194,7 +100,6 @@
 		asoc-codec-names = "msm-stub-codec.1", "tombak_codec";
 	};
 };
-
 
 &tlmm_pinmux {
 	bma2x2_int1_pin {
@@ -287,10 +192,31 @@
 		invn,gpio-int = <&msm_gpio 115 0x2002>;
 		invn,place = "Portrait Down Back Side";
 	};
+	
+	iteon@23 {
+		compatible = "liteon,ltr553";
+		reg = <0x23>;
+		pinctrl-names = "default","sleep";
+		pinctrl-0 = <&ltr553_default>;
+		pinctrl-1 = <&ltr553_sleep>;
+		interrupt-parent = <&msm_gpio>;
+		interrupts = <113 0x2>;
+		vdd-supply = <&pm8916_l17>;
+		vio-supply = <&pm8916_l6>;
+		liteon,intr = <&msm_gpio 113 0x2>;
+		liteon,highthr = <200>;
+		liteon,lowthr = <180>;
+		liteon_project = "mirage01a";
+	};
 };
-
-/*wubo mask it
-&sdc2_cd_on {
+&usb_otg {
+       qcom,hsusb-otg-mode = <3>;
+       qcom,usbid-gpio = <&msm_gpio 110 0>;
+       pinctrl-names = "default";
+       pinctrl-0 = <&usbid_default>;
+       vbus_otg-supply = <&smb1360_otg_supply>;
+};
+/*&sdc2_cd_on {
 	/delete-property/ bias-pull-up;
 	bias-pull-down;
 };
@@ -299,8 +225,8 @@
 	/delete-property/ bias-disable;
 	bias-pull-down;
 };*/
-/*wubo mask it
-&sdhc_2 {
+
+/*&sdhc_2 {
 	qcom,nonhotplug;
 	interrupts = <0 1>;
 	interrupt-map = <0 &intc 0 125 0
@@ -313,23 +239,15 @@
 	qcom,mdss-pref-prim-intf = "dsi";
 };
 
-//Jelly Remove  <&gp 1>, <&gp 36>, <&gp 76>;
 &pmx_mdss {
-	qcom,num-grp-pins = <1>;
-	qcom,pins = <&gp 25>;
+	qcom,num-grp-pins = <2>;
+	qcom,pins = <&gp 1>, <&gp 25>;
 };
 
 &mdss_dsi0 {
-	qcom,dsi-pref-prim-pan = <&dsi_ams497_720p_video>;
 	pinctrl-names = "mdss_default", "mdss_sleep";
 	pinctrl-0 = <&mdss_dsi_active>;
 	pinctrl-1 = <&mdss_dsi_suspend>;
 
 	qcom,platform-reset-gpio = <&msm_gpio 25 0>;
-	//qcom,platform-enable-gpio = <&msm_gpio 36 0>;
-	//qcom,platform-bklight-en-gpio = <&msm_gpio 76 0>;
-};
-
-&dsi_ams497_720p_video {
-	qcom,cont-splash-enabled;
 };

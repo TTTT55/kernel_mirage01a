@@ -17,7 +17,7 @@
 #include "vidc_hfi_api.h"
 
 #define MAX_DBG_BUF_SIZE 4096
-int msm_vidc_debug = 0;
+int msm_vidc_debug = VIDC_ERR | VIDC_WARN;
 int msm_vidc_debug_out = VIDC_OUT_PRINTK;
 int msm_fw_debug = 0x18;
 int msm_fw_debug_mode = 0x1;
@@ -409,7 +409,6 @@ static ssize_t inst_info_read(struct file *file, char __user *buf,
 	cur += write_str(cur, end - cur, "EBD Count: %d\n", inst->count.ebd);
 	cur += write_str(cur, end - cur, "FTB Count: %d\n", inst->count.ftb);
 	cur += write_str(cur, end - cur, "FBD Count: %d\n", inst->count.fbd);
-
 	publish_unreleased_reference(inst, &cur, end);
 	len = simple_read_from_buffer(buf, count, ppos,
 		dbuf, cur - dbuf);

@@ -252,7 +252,7 @@
 
 #define LUX_LEVEL 6
 static uint16_t lux_level_default[LUX_LEVEL] = {0, 10, 50, 100, 200, 1000};
-static uint16_t lux_level_test01a[LUX_LEVEL] = {0, 10, 50, 100, 200, 1000};
+static uint16_t lux_level_mirage01a[LUX_LEVEL] = {0, 10, 50, 100, 200, 1000};
 static uint16_t *lux_level;
 static int spirit_flage = 0;
 
@@ -6105,9 +6105,9 @@ static int ltr553_parse_dt(struct device *dev,
 	if (rc) {
 		lux_level = lux_level_default;
 	} else {
-                if(!strncmp(project_name, "test01a", strlen("test01a")))
+                if(!strncmp(project_name, "mirage01a", strlen("mirage01a")))
                 {
-                        lux_level = lux_level_test01a;
+                        lux_level = lux_level_mirage01a;
                 }
 		else
 			lux_level = lux_level_default;

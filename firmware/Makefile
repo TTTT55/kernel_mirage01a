@@ -137,7 +137,7 @@ fw-shipped-$(CONFIG_USB_VICAM) += vicam/firmware.fw
 fw-shipped-$(CONFIG_VIDEO_CPIA2) += cpia2/stv0672_vp4.bin
 fw-shipped-$(CONFIG_YAM) += yam/1200.bin yam/9600.bin
 
-fw-shipped-$(CONFIG_TEST_ONLY) += melfas/test_melfas_mip4.bin
+fw-shipped-$(CONFIG_TEST_ONLY) += ft5x46/CKT_Mirage_FT5346_Truly0x5a_V03_D01_20150409_app.bin
 fw-shipped-$(CONFIG_TESTPLUS_ONLY) += melfas/testplus_melfas_mip4.bin
 
 fw-shipped-all := $(fw-shipped-y) $(fw-shipped-m) $(fw-shipped-)
